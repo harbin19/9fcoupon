@@ -1,0 +1,26 @@
+function hello(){var src1='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js';var src2='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha1.js';if(document.getElementsByClassName('weeee').length==0){console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");loadScript(src1,function(){loadScript(src2,coupon)})}else coupon();function loadScript(src,callback){var script=document.createElement('script'),head=document.getElementsByTagName('head')[0];script.src=src;script.className="weeee";if(script.addEventListener){script.addEventListener('load',function(){callback()},false)}head.appendChild(script)}function coupon(){console.log("&&&&&&&&&&&&&&&&&&脚本加载完毕&&&&&&&&&&&&&&&&&&");var urls={"prizeinfo":"https://oapi.9f.cn/transformers/gift/rain/info/qb_spring_card_activity","prizesend":"https://oapi.9f.cn/transformers/gift/rain/prize/send/qb_spring_card_activity ",};var regexp=/mobile":"(\d{11}).*?token":"(.*?)","memberId":"(\d+)"/;var mex=document.cookie.match(regexp);var phone=mex[1],token=mex[2],memberId=mex[3];var infotmp=Date.now();console.log(infotmp);var infosign=CryptoJS.SHA1(infotmp+'qb_gift_rain').toString().toUpperCase();var scene;fetch(urls.prizeinfo,{method:"post",headers:{"Accept":"application/json, text/plain, */*","channel":"QB","Content-Type":"application/json; charset=UTF-8","loginChannel":"WEIXIN","memberId":memberId,"Origin":"https://h5.9f.cn","sign":infosign,"token":token},body:JSON.stringify({"activityCode":"qb_gift_rain","timestamp":infotmp}),credentials:"include",mode:"cors"}).then((res)=>{return res.json()}).then((res)=>{scene=res.data.playNumKey}).then(()=>{var key=token.substring(0,16);var iv="21520baeed8a48eb";console.log("sene---"+scene);console.log("token---"+token);console.log("key---"+key);var data=JSON.stringify({"awardPrizeList":[{"prizeType":"point","prizeNumber":19},{"prizeType":"coupon","prizeNumber":14}],"playNumKey":scene,"activityCode":"qb_gift_rain"});key=CryptoJS.enc.Utf8.parse(key);iv=CryptoJS.enc.Utf8.parse(iv);console.log("utf-key"+CryptoJS.enc.Utf8.stringify(key));var encrypted=CryptoJS.AES.encrypt(data,key,{iv:iv,mode:CryptoJS.mode.CBC,padding:CryptoJS.pad.Pkcs7});console.log("AES---data---"+encrypted.toString());var sendtmp=Date.now();console.log(sendtmp);var sendsign=CryptoJS.SHA1(sendtmp+encrypted.toString()).toString().toUpperCase();console.log("签名SIGN---sha1-------"+sendsign);var boddy={"data":encrypted.toString(),"timestamp":sendtmp};console.log(Date.now());fetch(urls.prizesend,{method:"post",headers:{"Accept":"application/json, text/plain, */*","channel":"QB","Content-Type":"application/json; charset=UTF-8","loginChannel":"WEIXIN","memberId":memberId,"Origin":"https://h5.9f.cn","sign":sendsign,"token":token},body:JSON.stringify(boddy),credentials:"include",mode:"cors"}).then((res)=>{return res.json()}).then((re)=>{console.log(Date.now()),console.log(re)})})}}
+
+var timeInterval,nowTime,nowSeconds,targetSeconds;
+ 
+  nowTime = new Date();
+  // 计算当前时间的秒数
+  nowSeconds = nowTime.getHours() * 3600 + nowTime.getMinutes() * 60 + nowTime.getSeconds();
+ 
+  // 计算目标时间对应的秒数
+  if(nowTime.getHours()<10)
+  targetSeconds =  10 * 3600+120;
+  else if(nowTime.getHours()<14)
+        targetSeconds = 14*3600+80;
+      else if(nowTime.getHours()<16)
+            targetSeconds = 16*3600+60;
+          else if(nowTime.getHours()<20)
+                targetSeconds = 20*3600+77;
+              else
+                targetSeconds = 22*3600+100;
+
+ 
+  //  判断是否已超过今日目标小时，若超过，时间间隔设置为距离明天目标小时的距离
+  timeInterval = targetSeconds > nowSeconds ? targetSeconds - nowSeconds: targetSeconds + 24 * 3600 - nowSeconds;
+ 
+  setTimeout(hello,timeInterval * 1000);
+  alert("倒计时"+timeInterval+"秒");
